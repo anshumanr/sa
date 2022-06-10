@@ -10,8 +10,12 @@ import (
 )
 
 func main() {
+	ch := make(chan bool)
+
 	session := session.New()
 	getIamIdentity(session)
+
+	<-ch
 }
 
 func getIamIdentity(session *session.Session) {
