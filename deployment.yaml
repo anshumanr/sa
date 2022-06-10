@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tel-controller
+  namespace: tel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tel-controller
+  strategy:
+    rollingUpdate:
+      maxSurge: 50%
+      maxUnavailable: 50%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: tel-controller
+    spec:
+      serviceAccountName: tel-controller-serviceaccount
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 65534
+      containers:
+      - image: asr245/sa:v1
+        imagePullPolicy: Always
+        name: tel-controller
+        securityContext:
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          allowPrivilegeEscalation: false
+---
