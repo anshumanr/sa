@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sts"
@@ -12,7 +13,10 @@ import (
 func main() {
 	ch := make(chan bool)
 
-	session := session.New()
+	session, err := session.NewSession(&aws.Config{LogLevel: aws.LogLevel(aws.LogDebug)})
+	if err != nil {
+		fmt.Println("Error creating session: ", err.Error())
+	}
 	getIamIdentity(session)
 
 	<-ch
